@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
+import {Component} from "@angular/core";
 
+// the component is a function, it's name is name of the class
+// in this case -> AppComponent
 @Component({
-  selector: 'pm-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'pm-root', // custom element, which will be searched by this name from the HTML to display the template
+  template: `
+    <div><h1>{{pageTitle}}</h1>
+        <div>My First Component</div>
+    </div>
+  `
 })
 export class AppComponent {
-  title = 'Angular: Getting Started';
+  pageTitle: string = 'Acme Product Management';
 }
