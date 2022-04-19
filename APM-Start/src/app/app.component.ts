@@ -9,6 +9,8 @@ import {Component} from "@angular/core";
         <div>My First Component</div>
     </div>
   `
+  // {{}} is rendering and it points at the template we want to display when needed
+  // in this case it is the pageTitle property in the AppComponent class
 })
 export class AppComponent {
   pageTitle: string = 'Acme Product Management';
