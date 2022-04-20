@@ -6,7 +6,7 @@ import {Component} from "@angular/core";
   selector: 'pm-root', // custom element, which will be searched by this name from the HTML to display the template
   template: `
     <div><h1>{{pageTitle}}</h1>
-        <div>My First Component</div>
+        <pm-products></pm-products>
     </div>
   `
   // {{}} is rendering and it points at the template we want to display when needed
@@ -14,4 +14,5 @@ import {Component} from "@angular/core";
 })
 export class AppComponent {
   pageTitle: string = 'Acme Product Management';
+
 }
