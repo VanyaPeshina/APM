@@ -6,6 +6,8 @@ import {IProduct} from "./product";
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
+
+// OnInit is a lifecycle hook (which is an Angular Interface)
 export class ProductListComponent implements OnInit {
   pageTitle: string = 'Product List';
   imageWidth: number = 50;

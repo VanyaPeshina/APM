@@ -1,6 +1,7 @@
 import { PipeTransform } from "@angular/core";
 import {Pipe} from "@angular/core";
 
+// A custom Pipe to transform any string which contains some character with " ".
 @Pipe({
   name: 'convertToSpaces'
 })
