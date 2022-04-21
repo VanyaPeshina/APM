@@ -50,14 +50,20 @@
                  [style.width.px]="imageWidth"
                  [style.margin.px]="imageMargin">
           </td>
-          <td>{{product.productName}}</td>
+          <td>
+            <a [routerLink]="['/products', product.productId]">
+              {{product.productName}}
+            </a>
+          </td>
           <td>{{product.productCode | lowercase | convertToSpaces:'-'}}</td>
           <td>{{product.releaseDate}}</td>
           <td>{{product.price | currency:'USD':'symbol':'1.2-2'}}</td>
           <!-- WITH THE EVENT BINDING WE PASSES THE DATA TO THE (NESTED) COMPONENT -->
           <!-- $event IS USED TO ACCESS THE EVENT DATA PASSED FROM THE NESTED COMPONENT -->
-          <td><pm-star [rating]="product.starRating"
-          (ratingClicked)="onRatingClicked($event)"></pm-star></td>
+          <td>
+            <pm-star [rating]="product.starRating"
+                     (ratingClicked)="onRatingClicked($event)"></pm-star>
+          </td>
         </tr>
         </tbody>
       </table>
