@@ -1,18 +1,50 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {IProduct} from "./product";
+import {ProductService} from "./product.service";
+import {Subscription} from "rxjs";
 
+// The Component can be bound to an exact component with 'providers: [ProductService]' for example,
+// which is a Component Injector
+// -> this way the service will be available ONLY to that component and its child or nested components
+// and it will provide multiple instances of the service
 @Component({
-  selector: 'pm-products',
+  //selector: 'pm-products',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
 
 // OnInit is a lifecycle hook (which is an Angular Interface)
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
+  //properties
   pageTitle: string = 'Product List';
   imageWidth: number = 50;
   imageMargin: number = 2;
   showImage: boolean = false;
+  products: IProduct[] = [];
+  errorMessage: string = '';
+  sub!: Subscription;
+
+  // OnInit is a Lifecycle hook
+  // it will be the first thing to be executed when the Component is initialized
+  ngOnInit(): void {
+    // this is the httpGet (the products from the server) request, but not and the actual response
+    //because it is an asynchronous operation
+    //so we add a {} after the next: products => and make a multiline func
+    //and nest this.filteredProducts in this func to get the response
+    this.sub = this.productService.getProducts().subscribe({
+      //next is associated to the result we want after the subscribe()
+      next: products => {
+        this.products = products;
+        this.filteredProducts = this.products;
+      },
+      //error is about what error to return if an error occurs
+      error: err => this.errorMessage = err
+    });
+  }
+
+  // constructor -> with the private (protected or public are also available)
+  // we inject the ProductService directly
+  constructor(private productService: ProductService) {}
 
   // FILTERING
   private _listFilter: string = '';
@@ -20,6 +52,7 @@ export class ProductListComponent implements OnInit {
   get listFilter(): string {
     return this._listFilter;
   }
+
   set listFilter(value: string) {
     this._listFilter = value;
     console.log('In setter:', value);
@@ -32,71 +65,18 @@ export class ProductListComponent implements OnInit {
     product.productName.toLocaleLowerCase().includes(filterBy));
   }
 
-  //MOCKED DATA WHICH SHOULD BE GOT FROM THE DATA BASE (IF ANY)
-  products: IProduct[] = [
-    {
-      "productId": 1,
-      "productName": "Leaf Rake",
-      "productCode": "GDN-0011",
-      "releaseDate": "March 19, 2021",
-      "description": "Leaf rake with 48-inch wooden handle.",
-      "price": 19.95,
-      "starRating": 3.2,
-      "imageUrl": "assets/images/leaf_rake.png"
-    },
-    {
-      "productId": 2,
-      "productName": "Garden Cart",
-      "productCode": "GDN-0023",
-      "releaseDate": "March 18, 2021",
-      "description": "15 gallon capacity rolling garden cart",
-      "price": 32.99,
-      "starRating": 4.2,
-      "imageUrl": "assets/images/garden_cart.png"
-    },
-    {
-      "productId": 5,
-      "productName": "Hammer",
-      "productCode": "TBX-0048",
-      "releaseDate": "May 21, 2021",
-      "description": "Curved claw steel hammer",
-      "price": 8.9,
-      "starRating": 4.8,
-      "imageUrl": "assets/images/hammer.png"
-    },
-    {
-      "productId": 8,
-      "productName": "Saw",
-      "productCode": "TBX-0022",
-      "releaseDate": "May 15, 2021",
-      "description": "15-inch steel blade hand saw",
-      "price": 11.55,
-      "starRating": 3.7,
-      "imageUrl": "assets/images/saw.png"
-    },
-    {
-      "productId": 10,
-      "productName": "Video Game Controller",
-      "productCode": "GMG-0042",
-      "releaseDate": "October 15, 2020",
-      "description": "Standard two-button video game controller",
-      "price": 35.95,
-      "starRating": 4.6,
-      "imageUrl": "assets/images/xbox-controller.png"
-    }
-  ];
-
+  //Show/Hide Image
   toggleImage(): void {
     this.showImage = !this.showImage;
-  }
-
-  ngOnInit(): void {
-    this.listFilter = '';
   }
 
   // this func is bound to the onClick() func in the star.component.ts
   onRatingClicked(message: string): void {
     this.pageTitle = 'Product List: ' + message;
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 }
 
