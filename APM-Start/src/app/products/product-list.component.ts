@@ -91,7 +91,12 @@ export class ProductListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listFilter = 'cart';
+    this.listFilter = '';
+  }
+
+  // this func is bound to the onClick() func in the star.component.ts
+  onRatingClicked(message: string): void {
+    this.pageTitle = 'Product List: ' + message;
   }
 }
 
